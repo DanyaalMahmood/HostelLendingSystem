@@ -20,7 +20,7 @@ const Signup = async (req, res) => {
       const salt = await bcrypt.genSalt();
       password = await bcrypt.hash(password, salt)
 
-      await db.query("insert into students(registration_number, first_name, last_name, password, hostel_number, phone_number, email) values($1, $2, $3, $4, $5, $6, $7)", [regno, fname, lname, password, hostelno, phoneno, email]);
+      await db.query("insert into students(registration_number, first_name, last_name, password, hostel_number, phone_number, email, isAdmin) values($1, $2, $3, $4, $5, $6, $7, $8)", [regno, fname, lname, password, hostelno, phoneno, email, false]);
       
       //generate jwt using id of the user
       token = await createToken(regno)

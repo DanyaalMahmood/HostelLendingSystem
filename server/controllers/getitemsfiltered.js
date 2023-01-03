@@ -8,9 +8,12 @@ const getitems = async (req, res) => {
   const decode = jwt.decode(token);
   const userid = decode.regno;
 
+  let {name} = req.body;
+  name = name.toUpperCase();
+
   try{
     
-    const response = (await db.query("select * from items i join students s on i.owner_id = s.registration_number where owner_id = $1", [userid])).rows;
+    const response = (await db.query("select * from available_items where (owner_id <> $1) and (upper(item_name) like $2 or upper(item_name) like $3 or upper(item_name) like $4 or upper(item_name) like  $5) ", [userid, '%' + name +'%',  name +'%',  '%' + name,name])).rows;
     res.json(response)
   } catch (err) {
     console.log(err);

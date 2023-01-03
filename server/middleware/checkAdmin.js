@@ -1,5 +1,6 @@
+const { json } = require('express');
 const jwt = require('jsonwebtoken');
-const db = require('../db')
+const db = require('../db.js')
 
 
 // check current user
@@ -10,7 +11,16 @@ const checkUser = async(req, res, next) => {
       if (err) {
         res.json({"error": "Not a valid json token"});
       } else {
-        next();
+        const decode = jwt.decode(token);
+        const regno = decode.regno;
+        let response = (await db.query("select * from students where registration_number = $1", [regno])).rows
+        if(response[0].isadmin == false)
+        {
+          return res.json({"error": "Not Admin"})
+        }
+        else{
+          next();
+        }
       }
     });
   } else {

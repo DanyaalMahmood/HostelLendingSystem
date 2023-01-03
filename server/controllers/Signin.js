@@ -22,6 +22,7 @@ const Signin = async (req, res) => {
     }
     else
     {
+      
       const user = response[0];
       let hashedPassword = user.password;
       let checkPassword = await bcrypt.compare(password, hashedPassword);
@@ -29,7 +30,14 @@ const Signin = async (req, res) => {
       {
         token = await createToken(user.registration_number)
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-        res.json({"message": "You are logged in!"})
+        if(response[0].isadmin == true)
+        {
+          res.json({"message": "admin"})
+        }
+        else {
+          res.json({"message": "You are logged in!"})
+        }
+        
       }
       else{
         res.json({"error": "Incorrect Password!"})

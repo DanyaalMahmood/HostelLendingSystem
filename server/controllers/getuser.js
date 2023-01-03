@@ -10,7 +10,7 @@ const getitems = async (req, res) => {
 
   try{
     
-    const response = (await db.query("select * from items i join students s on i.owner_id = s.registration_number where owner_id = $1", [userid])).rows;
+    const response = (await db.query("select * from students where registration_number <> $1", [userid])).rows;
     res.json(response)
   } catch (err) {
     console.log(err);

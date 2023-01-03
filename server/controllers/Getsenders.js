@@ -9,7 +9,7 @@ const Getsenders = async (req, res) => {
 
   const {item_id} = req.body;
   try {
-    response = await db.query("select m.sender_id, concat(s.first_name, ' ' , s.last_name) from messages m join students s on m.sender_id = s.registration_number where item_id = $1 and receiver_id = $2", [item_id, regno]);
+    response = await db.query("select distinct m.sender_id, concat(s.first_name, ' ' , s.last_name) as name from messages m join students s on m.sender_id = s.registration_number where item_id = $1 and receiver_id = $2", [item_id, regno]);
     res.json(response.rows);
 
   } catch (err) {
